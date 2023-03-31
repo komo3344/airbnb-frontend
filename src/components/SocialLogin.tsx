@@ -18,7 +18,7 @@ export default function SocialLogin() {
 
             </HStack>
             <VStack>
-                <Button w={"100%"} colorScheme={"blackAlpha"} leftIcon={<FaGithub />}>Github로 로그인하기</Button>
+                <Button w={"100%"} colorScheme={"gray"} leftIcon={<FaGithub />}>Github로 로그인하기</Button>
                 <Button w={"100%"} colorScheme={"yellow"} leftIcon={<FaComment />}>Kakao로 로그인하기</Button>
             </VStack>
         </Box>
