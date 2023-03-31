@@ -2,6 +2,8 @@
 
 ## setting react & chakra UI
 
+| https://chakra-ui.com/docs/components
+
 1. `npx create-react-app airbnb-react --template=typescript`
 
    `npm i @chakra-ui/react @emotion/react @emotion/styled framer-motion`
