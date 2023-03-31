@@ -13,4 +13,16 @@
 
 ## install react-router-dom
 
+---
+
+https://reactrouter.com/en/main
+
 `npm i react-router-dom`
+
+## install react-icons
+
+---
+
+https://react-icons.github.io/react-icons/
+
+`npm i react-icons --save`
