@@ -34,7 +34,7 @@ export default function Room() {
           <Text display={"block"} as="b" noOfLines={1} fontSize="md">
             Ganggu-myeon, Yeongdeok-gun, 경상북도, 한국
           </Text>
-          <HStack spacing={1} alignItems="center">
+          <HStack _hover={{ color: "red.400" }} spacing={1} alignItems="center">
             <FaStar size={12} />
             <Text fontSize={"sm"}>5.0</Text>
           </HStack>
