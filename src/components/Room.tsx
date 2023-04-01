@@ -10,15 +10,28 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-export default function Room() {
+interface IRoomProps {
+  imageUrl: string;
+  name: string;
+  city: string;
+  country: string;
+  rating: number;
+  price: number;
+}
+
+export default function Room({
+  imageUrl,
+  name,
+  city,
+  country,
+  rating,
+  price,
+}: IRoomProps) {
   const gray = useColorModeValue("gray.600", "gray.300");
   return (
     <VStack alignItems={"flex-start"}>
       <Box position="relative" overflow={"hidden"} mb={3} rounded="2xl">
-        <Image
-          minH="280"
-          src="https://a0.muscache.com/im/pictures/miso/Hosting-47181423/original/39c9d4e7-78d0-4807-9f0d-3029d987d02a.jpeg?im_w=720"
-        />
+        <Image minH="280" maxH="280" minW="280" maxW="280" src={imageUrl} />
         <Button
           variant={"unstyled"}
           position="absolute"
@@ -32,19 +45,19 @@ export default function Room() {
       <Box>
         <Grid gap={2} templateColumns={"6fr 1fr"}>
           <Text display={"block"} as="b" noOfLines={1} fontSize="md">
-            Ganggu-myeon, Yeongdeok-gun, 경상북도, 한국
+            {name}
           </Text>
           <HStack _hover={{ color: "red.400" }} spacing={1} alignItems="center">
             <FaStar size={12} />
-            <Text fontSize={"sm"}>5.0</Text>
+            <Text fontSize={"sm"}>{rating}</Text>
           </HStack>
         </Grid>
-        <Text fontSize={"sm"} color={gray}>
-          대한민국, 경상북도
+        <Text noOfLines={1} fontSize={"sm"} color={gray}>
+          {city}, {country}
         </Text>
       </Box>
       <Text fontSize={"sm"} color={gray}>
-        <Text as="b">₩286,200 /박</Text>
+        <Text as="b">₩{price} /박</Text>
       </Text>
     </VStack>
   );
