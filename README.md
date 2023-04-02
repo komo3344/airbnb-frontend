@@ -28,3 +28,11 @@ https://reactrouter.com/en/main
 https://react-icons.github.io/react-icons/
 
 `npm i react-icons --save`
+
+## install react-query
+
+---
+
+https://tanstack.com/query/latest/docs/react/overview
+
+`npm i @tanstack/react-query`
