@@ -1,6 +1,6 @@
 import { Grid } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import getRooms from "../api";
+import { getRooms } from "../api";
 import Room from "../components/Room";
 import RoomSkeleton from "../components/RoomSkeleton";
 
