@@ -48,3 +48,15 @@ export interface IRoomDetail extends IRoomList {
   owner: IRoomOwner;
   amenities: IAmenity[];
 }
+
+export interface IReview {
+  payload: string;
+  rating: number;
+  user: IRoomOwner;
+}
+export interface IReviewList {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: IReview[];
+}
