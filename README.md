@@ -36,3 +36,15 @@ https://react-icons.github.io/react-icons/
 https://tanstack.com/query/latest/docs/react/overview
 
 `npm i @tanstack/react-query`
+
+## install devtools
+
+---
+
+console.log로 매번 확인할 필요 없이 react query 개발자도구로 확인 할 수 있다.
+https://tanstack.com/query/v4/docs/react/devtools
+
+`npm i @tanstack/react-query-devtools`
+
+production 에서 제외하는 방법
+https://tanstack.com/query/latest/docs/react/devtools#devtools-in-production
