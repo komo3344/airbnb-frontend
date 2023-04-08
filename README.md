@@ -49,6 +49,11 @@ https://tanstack.com/query/v4/docs/react/devtools
 production 에서 제외하는 방법
 https://tanstack.com/query/latest/docs/react/devtools#devtools-in-production
 
+## install js-cookie
+
+npm i js-cookie
+npm i --save-dev @types/js-cookie
+
 <br><br>
 
 ## Note
