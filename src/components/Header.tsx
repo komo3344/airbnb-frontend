@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Button,
   HStack,
@@ -10,10 +11,12 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { FaAirbnb, FaMoon, FaSun } from "react-icons/fa";
+import useUser from "../lib/useUsers";
 import LoginModal from "./LoginModal";
 import SignUpModal from "./SignUpModal";
 
 export default function Header() {
+  const { userLoading, isLoggedIn, user } = useUser();
   const {
     isOpen: isLoginOpen,
     onOpen: onLoginOpen,
@@ -50,12 +53,20 @@ export default function Header() {
           aria-label="다크모드"
           icon={<Icon />}
         />
-        <Button onClick={onLoginOpen}>로그인</Button>
-        <LightMode>
-          <Button onClick={onSignUpOpen} colorScheme={"red"}>
-            회원가입
-          </Button>
-        </LightMode>
+        {!userLoading ? (
+          !isLoggedIn ? (
+            <>
+              <Button onClick={onLoginOpen}>Log in</Button>
+              <LightMode>
+                <Button onClick={onSignUpOpen} colorScheme={"red"}>
+                  Sign up
+                </Button>
+              </LightMode>
+            </>
+          ) : (
+            <Avatar name={user?.name} src={user?.avatar} size={"md"} />
+          )
+        ) : null}
       </HStack>
       <LoginModal isOpen={isLoginOpen} onClose={onLoginClose} />
       <SignUpModal isOpen={isSignUpOpen} onClose={onSignUpClose} />
