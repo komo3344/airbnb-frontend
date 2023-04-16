@@ -56,6 +56,8 @@ npm i --save-dev @types/js-cookie
 
 <br><br>
 
+## npm i react-hook-form
+
 ## Note
 
 ---
