@@ -19,6 +19,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
 import { FaAirbnb, FaMoon, FaSun } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 import { logOut } from "../api";
 import useUser from "../lib/useUsers";
 import LoginModal from "./LoginModal";
@@ -36,6 +37,7 @@ export default function Header() {
     onOpen: onSignUpOpen,
     onClose: onSignUpClose,
   } = useDisclosure();
+  const navigate = useNavigate();
   const { toggleColorMode } = useColorMode();
   const logoColor = useColorModeValue("red.500", "red.300");
   const Icon = useColorModeValue(FaMoon, FaSun);
@@ -59,6 +61,7 @@ export default function Header() {
           title: "로그아웃 완료!",
           description: "다음에 또 만나요!",
         });
+        navigate("/");
       }
     },
   });
@@ -104,7 +107,12 @@ export default function Header() {
                 <Avatar name={user?.name} src={user?.avatar} size={"md"} />
               </MenuButton>
               <MenuList>
-                <MenuItem onClick={onLogOut}>Log out</MenuItem>
+                {user?.is_host ? (
+                  <Link to="/rooms/upload">
+                    <MenuItem>방 생성하기</MenuItem>
+                  </Link>
+                ) : null}
+                <MenuItem onClick={onLogOut}>로그아웃</MenuItem>
               </MenuList>
             </Menu>
           )

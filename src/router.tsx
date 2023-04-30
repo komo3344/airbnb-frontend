@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import RoomDetail from "./components/RoomDetail";
 import Root from "./components/Root";
+import UploadRoom from "./components/UploadRoom";
 import GithubConfirm from "./routes/GithubConfirm";
 import Home from "./routes/Home";
 import KakaoConfirm from "./routes/KakaoConfirm";
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
+      },
+      {
+        path: "rooms/upload",
+        element: <UploadRoom />,
       },
       {
         path: "rooms/:roomPk",
