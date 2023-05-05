@@ -31,8 +31,6 @@ export interface IAmenity {
   pk: number;
   name: string;
   description: string;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface IRoomDetail extends IRoomList {
@@ -46,7 +44,7 @@ export interface IRoomDetail extends IRoomList {
   kind: string;
   is_owner: boolean;
   is_liked: boolean;
-  category: ICategory[];
+  category: ICategory;
   owner: IRoomOwner;
   amenities: IAmenity[];
 }

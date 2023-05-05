@@ -12,25 +12,47 @@ import {
   InputGroup,
   InputLeftAddon,
   Select,
+  Text,
   Textarea,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { FaBed, FaToilet, FaDollarSign } from "react-icons/fa";
-import { getAmenities, getCategories } from "../api";
+import {
+  getAmenities,
+  getCategories,
+  IUploadRoomVariables,
+  uploadRoom,
+} from "../api";
 import { IAmenity, ICategory } from "../types";
 import useHostOnlyPage from "./HostOnlyPage";
 import ProtectedPage from "./ProtectedPage";
 
 export default function UploadRoom() {
   useHostOnlyPage();
-  const { data: amenities, isLoading: isAmenitiesLoading } = useQuery<
-    IAmenity[]
-  >(["amenities"], getAmenities);
-  const { data: categories, isLoading: isCategoriesLoading } = useQuery<
-    ICategory[]
-  >(["categories"], getCategories);
+  const { data: amenities } = useQuery<IAmenity[]>(["amenities"], getAmenities);
+  const { data: categories } = useQuery<ICategory[]>(
+    ["categories"],
+    getCategories
+  );
+  const { register, handleSubmit } = useForm<IUploadRoomVariables>();
 
+  const toast = useToast();
+  const mutation = useMutation(uploadRoom, {
+    onSuccess: () => {
+      toast({
+        status: "success",
+        title: "방이 업로드 되었습니다.",
+        position: "bottom-right",
+      });
+    },
+    // TODO 유저 방으로 이동
+  });
+  const onSubmit = (data: IUploadRoomVariables) => {
+    mutation.mutate(data);
+  };
   return (
     <ProtectedPage>
       <Box
@@ -43,55 +65,103 @@ export default function UploadRoom() {
       >
         <Container>
           <Heading textAlign={"center"}>방 업로드</Heading>
-          <VStack spacing={10} as="form" mt={5}>
+          <VStack
+            onSubmit={handleSubmit(onSubmit)}
+            spacing={10}
+            as="form"
+            mt={5}
+          >
+            {/* ===========================이름=========================== */}
             <FormControl>
               <FormLabel>이름</FormLabel>
-              <Input required type="text" />
+              <Input
+                {...register("name", { required: true })}
+                required
+                type="text"
+              />
               <FormHelperText>방 이름을 입력해주세요.</FormHelperText>
             </FormControl>
+            {/* ===========================나라=========================== */}
             <FormControl>
               <FormLabel>나라</FormLabel>
-              <Input required type="text" />
+              <Input
+                {...register("country", { required: true })}
+                required
+                type="text"
+              />
             </FormControl>
+            {/* ===========================도시=========================== */}
             <FormControl>
               <FormLabel>도시</FormLabel>
-              <Input required type="text" />
+              <Input
+                {...register("city", { required: true })}
+                required
+                type="text"
+              />
             </FormControl>
+            {/* ===========================주소=========================== */}
             <FormControl>
               <FormLabel>주소</FormLabel>
-              <Input required type="text" />
+              <Input
+                {...register("address", { required: true })}
+                required
+                type="text"
+              />
             </FormControl>
+            {/* ===========================가격=========================== */}
             <FormControl>
               <FormLabel>가격</FormLabel>
               <InputGroup>
                 <InputLeftAddon children={<FaDollarSign />} />
-                <Input type="number" min={0} />
+                <Input
+                  {...register("price", { required: true })}
+                  type="number"
+                  min={0}
+                />
               </InputGroup>
             </FormControl>
+            {/* ===========================방 개수=========================== */}
             <FormControl>
               <FormLabel>방</FormLabel>
               <InputGroup>
                 <InputLeftAddon children={<FaBed />} />
-                <Input type="number" min={0} />
+                <Input
+                  {...register("rooms", { required: true })}
+                  type="number"
+                  min={0}
+                />
               </InputGroup>
             </FormControl>
+            {/* ===========================화장실=========================== */}
             <FormControl>
               <FormLabel>화장실</FormLabel>
               <InputGroup>
                 <InputLeftAddon children={<FaToilet />} />
-                <Input type="number" min={0} />
+                <Input
+                  {...register("toilets", { required: true })}
+                  type="number"
+                  min={0}
+                />
               </InputGroup>
             </FormControl>
+            {/* ===========================방 설명=========================== */}
             <FormControl>
               <FormLabel>설명</FormLabel>
-              <Textarea />
+              <Textarea {...register("description", { required: true })} />
             </FormControl>
+            {/* ===========================반려동물 허용 여부=========================== */}
             <FormControl>
-              <Checkbox>반려동물 허용 여부</Checkbox>
+              <Checkbox {...register("pet_friendly", { required: true })}>
+                반려동물 허용 여부
+              </Checkbox>
             </FormControl>
+            {/* ===========================방 종류=========================== */}
             <FormControl>
               <FormLabel>방 종류</FormLabel>
-              <Select placeholder="종류를 선택해주세요.">
+              <Select
+                {...register("kind", { required: true })}
+                placeholder="종류를 선택해주세요."
+              >
                 <option value="entire_place">숙소 전체</option>
                 <option value="private_room">개인실</option>
                 <option value="shared_room">공유실</option>
@@ -100,9 +170,13 @@ export default function UploadRoom() {
                 어떤 종류의 숙소를 대여하실건가요?
               </FormHelperText>
             </FormControl>
+            {/* ===========================방 카테고리=========================== */}
             <FormControl>
               <FormLabel>방 카테고리</FormLabel>
-              <Select placeholder="카테고리를 선택해주세요.">
+              <Select
+                {...register("category", { required: true })}
+                placeholder="카테고리를 선택해주세요."
+              >
                 {categories?.map((category) => (
                   <option key={category.pk} value={category.pk}>
                     {category.name}
@@ -113,18 +187,28 @@ export default function UploadRoom() {
                 어떤 카테고리의 숙소를 대여하실건가요?
               </FormHelperText>
             </FormControl>
+            {/* ===========================편의 시설=========================== */}
             <FormControl>
-              <FormLabel>Amenities</FormLabel>
+              <FormLabel>편의시설</FormLabel>
               <Grid templateColumns={"1fr 1fr"} gap={5}>
                 {amenities?.map((amenity) => (
                   <Box key={amenity.pk}>
-                    <Checkbox>{amenity.name}</Checkbox>
+                    <Checkbox {...register("amenities", { required: true })}>
+                      {amenity.name}
+                    </Checkbox>
                     <FormHelperText>{amenity.description}</FormHelperText>
                   </Box>
                 ))}
               </Grid>
             </FormControl>
-            <Button colorScheme={"red"} size="lg" w="100%">
+            {mutation.isError ? <Text>잘못된 값을 보냈습니다.</Text> : null}
+            <Button
+              type="submit"
+              isLoading={mutation.isLoading}
+              colorScheme={"red"}
+              size="lg"
+              w="100%"
+            >
               방 업로드
             </Button>
           </VStack>
