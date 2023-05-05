@@ -20,13 +20,14 @@ import {
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { FaBed, FaToilet, FaDollarSign } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import {
   getAmenities,
   getCategories,
   IUploadRoomVariables,
   uploadRoom,
 } from "../api";
-import { IAmenity, ICategory } from "../types";
+import { IAmenity, ICategory, IRoomDetail } from "../types";
 import useHostOnlyPage from "./HostOnlyPage";
 import ProtectedPage from "./ProtectedPage";
 
@@ -37,22 +38,25 @@ export default function UploadRoom() {
     ["categories"],
     getCategories
   );
-  const { register, handleSubmit } = useForm<IUploadRoomVariables>();
-
+  const { register, handleSubmit, watch } = useForm<IUploadRoomVariables>();
+  console.log(watch());
+  const navigate = useNavigate();
   const toast = useToast();
   const mutation = useMutation(uploadRoom, {
-    onSuccess: () => {
+    onSuccess: (data: IRoomDetail) => {
       toast({
         status: "success",
         title: "방이 업로드 되었습니다.",
         position: "bottom-right",
       });
+      navigate(`/rooms/${data.id}`);
     },
-    // TODO 유저 방으로 이동
   });
   const onSubmit = (data: IUploadRoomVariables) => {
+    console.log("submit!!");
     mutation.mutate(data);
   };
+
   return (
     <ProtectedPage>
       <Box
@@ -66,9 +70,9 @@ export default function UploadRoom() {
         <Container>
           <Heading textAlign={"center"}>방 업로드</Heading>
           <VStack
-            onSubmit={handleSubmit(onSubmit)}
             spacing={10}
             as="form"
+            onSubmit={handleSubmit(onSubmit)}
             mt={5}
           >
             {/* ===========================이름=========================== */}
@@ -151,7 +155,7 @@ export default function UploadRoom() {
             </FormControl>
             {/* ===========================반려동물 허용 여부=========================== */}
             <FormControl>
-              <Checkbox {...register("pet_friendly", { required: true })}>
+              <Checkbox {...register("pet_friendly", { required: false })}>
                 반려동물 허용 여부
               </Checkbox>
             </FormControl>
@@ -193,7 +197,10 @@ export default function UploadRoom() {
               <Grid templateColumns={"1fr 1fr"} gap={5}>
                 {amenities?.map((amenity) => (
                   <Box key={amenity.pk}>
-                    <Checkbox {...register("amenities", { required: true })}>
+                    <Checkbox
+                      value={amenity.pk}
+                      {...register("amenities", { required: false })}
+                    >
                       {amenity.name}
                     </Checkbox>
                     <FormHelperText>{amenity.description}</FormHelperText>
@@ -201,7 +208,9 @@ export default function UploadRoom() {
                 ))}
               </Grid>
             </FormControl>
-            {mutation.isError ? <Text>잘못된 값을 보냈습니다.</Text> : null}
+            {mutation.isError ? (
+              <Text color="red.500">잘못된 값을 보냈습니다.</Text>
+            ) : null}
             <Button
               type="submit"
               isLoading={mutation.isLoading}
