@@ -1,30 +1,36 @@
 import {
   Box,
+  Button,
   Checkbox,
   Container,
   FormControl,
   FormHelperText,
   FormLabel,
+  Grid,
   Heading,
   Input,
   InputGroup,
   InputLeftAddon,
-  InputLeftElement,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
   Select,
   Textarea,
   VStack,
 } from "@chakra-ui/react";
-import { FaBed, FaMoneyBill, FaToilet, FaDollarSign } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
+import { FaBed, FaToilet, FaDollarSign } from "react-icons/fa";
+import { getAmenities, getCategories } from "../api";
+import { IAmenity, ICategory } from "../types";
 import useHostOnlyPage from "./HostOnlyPage";
 import ProtectedPage from "./ProtectedPage";
 
 export default function UploadRoom() {
   useHostOnlyPage();
+  const { data: amenities, isLoading: isAmenitiesLoading } = useQuery<
+    IAmenity[]
+  >(["amenities"], getAmenities);
+  const { data: categories, isLoading: isCategoriesLoading } = useQuery<
+    ICategory[]
+  >(["categories"], getCategories);
+
   return (
     <ProtectedPage>
       <Box
@@ -37,7 +43,7 @@ export default function UploadRoom() {
       >
         <Container>
           <Heading textAlign={"center"}>방 업로드</Heading>
-          <VStack spacing={5} as="form" mt={5}>
+          <VStack spacing={10} as="form" mt={5}>
             <FormControl>
               <FormLabel>이름</FormLabel>
               <Input required type="text" />
@@ -94,6 +100,33 @@ export default function UploadRoom() {
                 어떤 종류의 숙소를 대여하실건가요?
               </FormHelperText>
             </FormControl>
+            <FormControl>
+              <FormLabel>방 카테고리</FormLabel>
+              <Select placeholder="카테고리를 선택해주세요.">
+                {categories?.map((category) => (
+                  <option key={category.pk} value={category.pk}>
+                    {category.name}
+                  </option>
+                ))}
+              </Select>
+              <FormHelperText>
+                어떤 카테고리의 숙소를 대여하실건가요?
+              </FormHelperText>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Amenities</FormLabel>
+              <Grid templateColumns={"1fr 1fr"} gap={5}>
+                {amenities?.map((amenity) => (
+                  <Box key={amenity.pk}>
+                    <Checkbox>{amenity.name}</Checkbox>
+                    <FormHelperText>{amenity.description}</FormHelperText>
+                  </Box>
+                ))}
+              </Grid>
+            </FormControl>
+            <Button colorScheme={"red"} size="lg" w="100%">
+              방 업로드
+            </Button>
           </VStack>
         </Container>
       </Box>
