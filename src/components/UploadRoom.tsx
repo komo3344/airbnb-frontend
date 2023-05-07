@@ -38,8 +38,7 @@ export default function UploadRoom() {
     ["categories"],
     getCategories
   );
-  const { register, handleSubmit, watch } = useForm<IUploadRoomVariables>();
-  console.log(watch());
+  const { register, handleSubmit } = useForm<IUploadRoomVariables>();
   const navigate = useNavigate();
   const toast = useToast();
   const mutation = useMutation(uploadRoom, {
@@ -53,7 +52,6 @@ export default function UploadRoom() {
     },
   });
   const onSubmit = (data: IUploadRoomVariables) => {
-    console.log("submit!!");
     mutation.mutate(data);
   };
 
